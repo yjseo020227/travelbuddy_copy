@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head> 
+        <title>Trip recommendations</title>
+        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        <meta charset="utf-8">
+
+        
+    </head>
+
+    <header> 
+        <h1>당신의 이상적인</h1>
+        <h1> 여행 사진을 올려주세요</h1>
+    </header>
+
+    <body> 
+        <div class = "form-container">
+            <form action = "" method = "POST" enctype = "multipart/form-data"> 
+                {% csrf_token %}
+                    <label for  = "" class = "form-label"> 이미지 정하기 </lable>  
+                    <input type = "file" Reguired name = "image" class = "form-control" name = "image">
+                    <button type = "submit" class = "btn btn-primary"> 이미지 업로드</button>
+                    
+</form>
+        </div>
+
+        <div class = "all_places">
+            {% for place in three_places %}
+            <p><strong> {{ place.name }} </strong></p>
+            <img src = "{{place.image.url}}" class = "place_image"> 
+            <br>
+            {% endfor %}
+        </div>  
+        
+    </body>
+
+    
+</html>
+
+
+
