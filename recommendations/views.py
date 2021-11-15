@@ -77,12 +77,20 @@ def get_data(request):
 
     place_list = Places.objects.filter(name = place_name)
     place_list_send = list(Places.objects.filter(name = place_name).values())
-    count = 0 
+    place_list_send = place_list_send[0]
+    del place_list_send['rgb']
+
+    foot_traffic_objects = Foot_Traffic.objects.filter(place__name = place_name)
+    mean_traffic = foot_traffic_objects.aggregate(Avg('traffic_level'))
+    mean_traffic = mean_traffic['traffic_level__avg']
+    print('mean traffic is ' + str(mean_traffic))
+
     for place in place_list: 
         url = place.image.url
-        place_list_send[count]['image'] = url
-        count += 1
-    
+        place_list_send['image'] = url
+        
+        
+    place_list_send['mean_traffic'] = mean_traffic
     data = {'place' : place_list_send}
     return JsonResponse(data)
 
