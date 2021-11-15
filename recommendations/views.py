@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Avg
@@ -60,8 +60,6 @@ def homePageView(request):
         return render(request,'home.html', {'three_places' : place_list})
 
         
-
-
         # get the bottom3 
 
 
@@ -73,7 +71,20 @@ def homePageView(request):
     return render(request,'home.html')
 
 
+def get_data(request):
+    place_name= request.GET.get('place', None)
+    print('place selected is '+ str(place_name))
 
+    place_list = Places.objects.filter(name = place_name)
+    place_list_send = list(Places.objects.filter(name = place_name).values())
+    count = 0 
+    for place in place_list: 
+        url = place.image.url
+        place_list_send[count]['image'] = url
+        count += 1
+    
+    data = {'place' : place_list_send}
+    return JsonResponse(data)
 
 """
 #compare all similarity scores
